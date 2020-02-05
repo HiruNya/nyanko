@@ -3,10 +3,9 @@ import QtQuick.Controls 2.14
 import org.kde.kirigami 2.7 as Kirigami
 
 Kirigami.CardsGridView {
-    model: 20
     delegate: Kirigami.Card {
-        banner.title: "Boku no Hero Acadamia"
-        banner.source: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx21856-I9rVZElYPVUE.png"
+        banner.title: title
+        banner.source: image
 
 //        contentItem: Label {
 //            elide: Text.ElideRight
@@ -23,19 +22,20 @@ Kirigami.CardsGridView {
 //        banner.sourceSize.height: 400*9/16
         banner.sourceSize.height: 260
         banner.sourceSize.width: 400
+        banner.fillMode: Image.PreserveAspectCrop
 
         actions: [
             Kirigami.Action {
-                text: "Watching"
+                text: qsTr("Watching")
             },
             Kirigami.Action {
-                text: "Plan To Watch"
+                text: qsTr("Plan To Watch")
                 iconName: "clock"
             }
         ]
         hiddenActions: [
             Kirigami.Action {
-                text: "Dropped"
+                text: qsTr("Dropped")
             }
         ]
     }

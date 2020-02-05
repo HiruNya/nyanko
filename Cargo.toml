@@ -1,4 +1,6 @@
 [workspace]
 members = [
-	"nyanko"
+	"nyanko",
+	"nyanko-core",
+	"nyanko-anilist",
 ]

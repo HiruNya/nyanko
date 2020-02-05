@@ -1,0 +1,12 @@
+[package]
+name = "nyanko-core"
+version = "0.1.0"
+authors = ["Hiruna Kethaka Jayamanne <hirunav2@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+nyanko-anilist = { path = "../nyanko-anilist" }
+
+once_cell = "1"
+tokio = { version = "0.2", features = ["sync", "rt-core"] }
+log = "0.4"

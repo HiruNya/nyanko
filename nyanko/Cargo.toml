@@ -5,4 +5,10 @@ authors = ["Hiruna Kethaka Jayamanne <hirunav2@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+nyanko-core = { path = "../nyanko-core" }
+nyanko-anilist= { path = "../nyanko-anilist" }
+
+cstr = "0.1"
+log = "0.4"
+pretty_env_logger = "0.3"
 qmetaobject = "0.1"
