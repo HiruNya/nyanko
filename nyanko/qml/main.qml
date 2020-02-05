@@ -17,7 +17,5 @@ Kirigami.ApplicationWindow {
 
     Nyanko {
         id: nyanko
-        // ToDo: Figure out why this is required for the results to update
-        onSearchResultsChanged: console.log("Displaying Search Results")
     }
 }

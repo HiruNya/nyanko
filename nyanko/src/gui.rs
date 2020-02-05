@@ -9,22 +9,19 @@ use super::model::SearchEntry;
 pub struct Gui {
 	base: qt_base_class!(trait QObject),
 	search: qt_method!(fn(&self, query: String)),
-	search_results: qt_property!(RefCell<SimpleListModel<SearchEntry>>; NOTIFY searchResultsChanged),
-	searchResultsChanged: qt_signal!(),
+	search_results: qt_property!(RefCell<SimpleListModel<SearchEntry>>; CONST),
 }
 impl Gui {
 	fn search(&self, query: String) {
 		let ptr = QPointer::from(&*self);
 		execute_async(async move {
-			let result = if let Some(result) = core::search(query).await.unwrap() {
+			let list = if let Some(result) = core::search(query).await.unwrap() {
 				result.into_iter()
 					.map(|entry| SearchEntry::from(entry))
 					.collect()
-			} else { SimpleListModel::default() };
-			ptr.as_pinned().map(|ptr|{
-				let ptr = ptr.borrow();
-				*(ptr.search_results.borrow_mut()) = result;
-				ptr.searchResultsChanged();
+			} else { Vec::default() };
+			ptr.as_pinned().map(|ptr| {
+				ptr.borrow().search_results.borrow_mut().reset_data(list);
 			});
 		})
 	}

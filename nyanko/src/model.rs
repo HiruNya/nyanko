@@ -2,7 +2,7 @@ use qmetaobject::*;
 
 use nyanko_anilist::SearchEntry as NyankoSearchEntry;
 
-#[derive(Clone, SimpleListItem)]
+#[derive(SimpleListItem)]
 pub struct SearchEntry {
 	pub image: QVariant, // Todo: Change this to QUrl when possible
 	pub title: String,
