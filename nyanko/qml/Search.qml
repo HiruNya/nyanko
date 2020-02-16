@@ -27,32 +27,17 @@ Kirigami.ScrollablePage {
         }
     }
 
-    StackLayout {
-        id: stack
-        // A blank page used at the start
-        Item {
-        }
-        // If we can't find any search results
-        Label {
-            text: "No results were found"
-        }
-        // Displays search results
-        AniGrid {
-            model: applicationWindow().core.search_results
-            selected: root.selected
-            onSelectedChanged: {
-                if (selected) {
-                    push_anime_page()
-                } else {
-                    applicationWindow().pageStack.pop()
-                }
+    // Displays search results
+    AniGrid {
+        id: grid
+        model: applicationWindow().core.search_results
+        selected: root.selected
+        onSelectedChanged: {
+            if (selected) {
+                push_anime_page()
+            } else {
+                applicationWindow().pageStack.pop()
             }
         }
-    }
-
-    Component.onCompleted: {
-        core.search_results.modelReset.connect(() => {
-            stack.currentIndex = (applicationWindow().core.search_results.rowCount() === 0)? 1: 2
-        })
     }
 }

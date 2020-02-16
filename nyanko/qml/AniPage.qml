@@ -10,6 +10,6 @@ Kirigami.Page {
 
     Image {
         anchors.fill: parent
-        source: image
+        source: page.image
     }
 }
