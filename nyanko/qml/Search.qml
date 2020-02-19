@@ -11,7 +11,9 @@ Kirigami.ScrollablePage {
     function push_anime_page() {
         let page = applicationWindow().pagePool.loadPage("AniPage.qml")
         applicationWindow().pageStack.push(page)
+        page.anime_id = selected.anime_id
         page.anime_title = selected.anime_title
+        page.description = selected.description
         page.image = selected.image
     }
 

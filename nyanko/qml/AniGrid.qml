@@ -24,10 +24,18 @@ Kirigami.CardsGridView {
         actions: [
             Kirigami.Action {
                 text: qsTr("Watching")
+                iconName: "quickview"
+                displayHint: Kirigami.Action.DisplayHint.IconOnly
             },
             Kirigami.Action {
                 text: qsTr("Plan To Watch")
                 iconName: "clock"
+                displayHint: Kirigami.Action.DisplayHint.IconOnly
+            },
+            Kirigami.Action {
+                text: qsTr("Completed")
+                iconName: "dialog-ok"
+                displayHint: Kirigami.Action.DisplayHint.IconOnly
             }
         ]
         hiddenActions: [
@@ -43,7 +51,7 @@ Kirigami.CardsGridView {
             anchors.right: parent.right
             height: banner.height
             onClicked: {
-                selected = { anime_title: title, image: image }
+                selected = { anime_title: title, image: image, anime_id: anime_id, description: description }
             }
         }
     }

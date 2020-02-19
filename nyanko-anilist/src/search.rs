@@ -8,6 +8,7 @@ query($search: String, $page: Int) {
 	Page(page: $page, perPage: 20) {
 		media(search: $search) {
 			id,
+			description,
 			title {
 				english
 				userPreferred
@@ -44,6 +45,7 @@ pub async fn search(client: &reqwest::Client, query: &str) -> ReqwestResult<Vec<
 #[serde(rename_all = "camelCase")]
 pub struct SearchEntry {
 	pub id: i64,
+	pub description: Option<String>,
 	pub title: SearchTitle,
 	pub cover_image: CoverImage,
 }

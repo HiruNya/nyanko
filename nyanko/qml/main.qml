@@ -10,6 +10,9 @@ Kirigami.ApplicationWindow {
     property Nyanko core: nyanko
     pageStack.initialPage: pagePool.loadPage("WelcomePage.qml")
     globalDrawer: Kirigami.GlobalDrawer {
+        modal: false
+        collapsible: true
+        collapsed: true
         actions: [
             Kirigami.PagePoolAction {
                 text: "Welcome"
