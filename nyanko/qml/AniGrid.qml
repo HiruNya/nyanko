@@ -51,7 +51,11 @@ Kirigami.CardsGridView {
             anchors.right: parent.right
             height: banner.height
             onClicked: {
-                selected = { anime_title: title, image: image, anime_id: anime_id, description: description }
+                selected.anime_id = anime_id
+                selected.anime_title = title
+                selected.image = image
+                selected.description = description
+                selected.active = true
             }
         }
     }

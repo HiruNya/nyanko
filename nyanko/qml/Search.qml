@@ -6,24 +6,37 @@ import org.kde.kirigami 2.10 as Kirigami
 Kirigami.ScrollablePage {
     id: root
     title: qsTr("Search")
-    property var selected
+    property var selected: QtObject {
+        property bool active
+        property string anime_title
+        property int anime_id
+        property string description
+        property url image
+        onActiveChanged: {
+            if (selected.active) {
+                push_anime_page()
+            } else if (applicationWindow().pageStack.currentItem === page) {
+                applicationWindow().pageStack.pop()
+            }
+        }
+    }
+
+    property AniPage page: applicationWindow().pagePool.loadPage("AniPage.qml")
 
     function push_anime_page() {
-        let page = applicationWindow().pagePool.loadPage("AniPage.qml")
+        page.selected = root.selected
         applicationWindow().pageStack.push(page)
-        page.anime_id = selected.anime_id
-        page.anime_title = selected.anime_title
-        page.description = selected.description
-        page.image = selected.image
     }
 
     header: ToolBar {
         SearchBar {
             id: search
             anchors.fill: parent
+            property string old_search
             onAccepted: {
-                if (search.text !== "") {
+                if ((search.text.trim() !== "") && (old_search !== search.text)) {
                     applicationWindow().core.search(search.text)
+                    old_search = search.text
                 }
             }
         }
@@ -34,12 +47,5 @@ Kirigami.ScrollablePage {
         id: grid
         model: applicationWindow().core.search_results
         selected: root.selected
-        onSelectedChanged: {
-            if (selected) {
-                push_anime_page()
-            } else {
-                applicationWindow().pageStack.pop()
-            }
-        }
     }
 }

@@ -1,7 +1,7 @@
 #[macro_use] extern crate cstr;
 #[macro_use] extern crate log;
 #[macro_use] extern crate qmetaobject;
-extern crate nyanko_core as core;
+mod core;
 mod gui;
 mod model;
 mod resource;
@@ -14,7 +14,7 @@ fn main() {
 	pretty_env_logger::init();
 	info!("Starting");
 	let mut engine = QmlEngine::new();
-	let finish = core::run();
+	let finish = nyanko_core::run_runtime();
 	resource::declare_resources();
 	qml_register_type::<gui::Gui>(cstr!("core"), 1, 0, cstr!("Nyanko"));
 	engine.load_file("qrc:/qml/main.qml".into());

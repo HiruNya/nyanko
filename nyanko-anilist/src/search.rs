@@ -1,12 +1,12 @@
 use reqwest::Result as ReqwestResult;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use super::{GraphQlResponsePayload, GraphQlPage, GraphQlMedia};
 
 const QUERY: &str = r#"
-query($search: String, $page: Int) {
+query($search: String, $page: Int, $media_type: MediaType) {
 	Page(page: $page, perPage: 20) {
-		media(search: $search) {
+		media(search: $search, type: $media_type) {
 			id,
 			description,
 			title {
@@ -22,22 +22,22 @@ query($search: String, $page: Int) {
 "#;
 
 pub async fn search(client: &reqwest::Client, query: &str) -> ReqwestResult<Vec<SearchEntry>> {
-	Ok(
-		client.post(super::URL)
-			.json(&super::GraphQlQueryPayload {
-				query: QUERY,
-				variables: serde_json::json!({
-					"search": query,
-				}),
-			})
-			.send()
-			.await?
-			.json::<GraphQlResponsePayload<GraphQlPage<GraphQlMedia<SearchEntry>>>>()
-			.await?
-			.unwrap()
-			.page
-			.media
-	)
+	let entries = client.post(super::URL)
+		.json(&super::GraphQlQueryPayload {
+			query: QUERY,
+			variables: serde_json::json!({
+				"search": query,
+				"media_type": MediaType::Anime,
+			}),
+		})
+		.send()
+		.await?
+		.json::<GraphQlResponsePayload<GraphQlPage<GraphQlMedia<SearchEntry>>>>()
+		.await?
+		.unwrap()
+		.page
+		.media;
+	Ok(entries)
 }
 
 
@@ -60,4 +60,12 @@ pub struct SearchTitle {
 #[derive(Deserialize)]
 pub struct CoverImage {
 	pub large: String,
+}
+
+#[derive(Serialize)]
+#[serde(rename_all = "UPPERCASE")]
+pub enum MediaType {
+	Anime,
+	#[allow(dead_code)]
+	Manga,
 }

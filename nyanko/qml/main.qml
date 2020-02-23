@@ -26,7 +26,7 @@ Kirigami.ApplicationWindow {
                     let page = window.pagePool.loadPage("Search.qml")
                     window.pageStack.clear()
                     window.pageStack.push(page)
-                    if (page.selected) {
+                    if (page.selected.active) {
                         page.push_anime_page()
                     }
                 }

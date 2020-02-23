@@ -5,11 +5,8 @@ import org.kde.kirigami 2.11 as Kirigami
 
 Kirigami.ScrollablePage {
     id: page
-    property int anime_id
-    property string anime_title
-    property string description
-    property url image
-    title: anime_title
+    property var selected
+    title: (selected)? selected.anime_title: "???"
 
     actions {
         left: Kirigami.Action {
@@ -21,6 +18,7 @@ Kirigami.ScrollablePage {
             text: qsTr("Completed")
             iconName: "dialog-ok"
             displayHint: Kirigami.Action.DisplayHint.IconOnly
+            onTriggered: { selected.active = false }
         }
         right: Kirigami.Action {
             text: qsTr("Plan To Watch")
@@ -35,10 +33,11 @@ Kirigami.ScrollablePage {
         property bool is_row: (width >= max_row_width)
         rows: (is_row)? 1: 2
         columns: (!is_row)? 1: 2
+        rowSpacing: 5
 
         Image {
             id: cover_image
-            source: page.image
+            source: (page.selected)? page.selected.image: ""
             Layout.alignment: (layout.is_row)? Qt.AlignTop: Qt.AlignHCenter
             Layout.preferredWidth: sourceSize.width
         }
@@ -50,8 +49,7 @@ Kirigami.ScrollablePage {
             spacing: 15
             Label {
                 id: title_label
-                text: page.anime_title
-                horizontalAlignment: Text.horizontalCenter
+                text: (page.selected)? page.selected.anime_title: "???"
                 fontSizeMode: Text.HorizontalFit
                 wrapMode: Text.Wrap
                 font.underline: true
@@ -59,7 +57,7 @@ Kirigami.ScrollablePage {
             }
             Text {
                 id: description_text
-                text: page.description
+                text: (page.selected)? page.selected.description: "???"
                 wrapMode: Text.Wrap
                 color: Kirigami.Theme.textColor
                 width: if (layout.is_row) {layout.parent.width - cover_image.width} else {layout.parent.width}
