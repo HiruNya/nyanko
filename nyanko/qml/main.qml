@@ -19,18 +19,19 @@ Kirigami.ApplicationWindow {
                 page: "WelcomePage.qml"
                 pagePool: window.pagePool
             },
-            Kirigami.Action {
+            Kirigami.PagePoolAction {
                 text: "Search"
                 iconName: "search"
-                onTriggered: {
-                    let page = window.pagePool.loadPage("Search.qml")
-                    window.pageStack.clear()
-                    window.pageStack.push(page)
-                    if (page.selected.active) {
-                        page.push_anime_page()
-                    }
-                }
+                page: "Search.qml"
+                pagePool: window.pagePool
+            },
+            Kirigami.PagePoolAction {
+                text: "Accounts"
+                iconName: "user"
+                page: "AccountPage.qml"
+                pagePool: window.pagePool
             }
+
         ]
     }
 

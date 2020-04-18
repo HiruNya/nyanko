@@ -1,3 +1,4 @@
+mod login;
 mod search;
 use log::{info, error};
 use reqwest::Result as ReqwestResult;
@@ -6,18 +7,23 @@ use serde_json::Value as JsonValue;
 
 const URL: &str = "https://graphql.anilist.co";
 
+use login::auth_link;
 pub use search::{SearchEntry, SearchTitle, CoverImage};
 
 #[derive(Clone)]
 pub struct Client {
 	client: reqwest::Client,
+	client_id: String,
 }
 impl Client {
-	pub fn new() -> Self {
+	pub fn new(client_id: String) -> Self {
 		Self {
 			client: reqwest::Client::new(),
+			client_id,
 		}
 	}
+
+	pub fn auth_link(&self) -> String { auth_link(self.client_id.as_str()) }
 
 	pub async fn search(&self, query: String) -> ReqwestResult<Vec<SearchEntry>> {
 		info!("Searching for `{}`", query);

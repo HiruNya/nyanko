@@ -6,6 +6,7 @@ import org.kde.kirigami 2.10 as Kirigami
 Kirigami.ScrollablePage {
     id: root
     title: qsTr("Search")
+
     property var selected: QtObject {
         property bool active
         property string anime_title
@@ -47,5 +48,11 @@ Kirigami.ScrollablePage {
         id: grid
         model: applicationWindow().core.search_results
         selected: root.selected
+    }
+
+    onIsCurrentPageChanged: () => {
+        if (isCurrentPage && selected.active) {
+            push_anime_page()
+        }
     }
 }

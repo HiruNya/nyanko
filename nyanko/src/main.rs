@@ -7,6 +7,7 @@ mod model;
 mod resource;
 
 use qmetaobject::{QmlEngine, qml_register_type};
+
 use std::env;
 
 fn main() {
