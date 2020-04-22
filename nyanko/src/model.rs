@@ -1,6 +1,25 @@
 use qmetaobject::*;
 
 use nyanko_anilist::SearchEntry as NyankoSearchEntry;
+use nyanko_core::AniListAccount;
+
+#[derive(Default, SimpleListItem)]
+pub struct AccountEntry {
+	pub avatar: QString,
+	pub name: String,
+	pub id: String,
+	pub account_type: String,
+}
+impl From<&AniListAccount> for AccountEntry {
+	fn from(al: &AniListAccount) -> Self {
+		Self {
+			name: al.name.clone(),
+			id: al.id.clone(),
+			avatar: al.avatar.clone().unwrap_or_default().into(),
+			account_type: "AniList".to_string(),
+		}
+	}
+}
 
 #[derive(SimpleListItem)]
 pub struct SearchEntry {

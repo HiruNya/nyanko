@@ -3,18 +3,22 @@ import QtQuick.Controls 2.14
 import org.kde.kirigami 2.11 as Kirigami
 
 Kirigami.Page {
+    id: page
     property string link: window.core.anilist_login_link()
+    title: qsTr("Log in to AniList")
+    function login () {
+        if (window.core.anilist_login(code_field.text)) {
+            window.pageStack.replace(window.pagePool.loadPage("AccountPage.qml"))
+        } else {
+            console.log("Error Logging In")
+        }
+    }
+
     Column {
         anchors.fill: parent
-        Label {
-            width: parent.width
-            text: qsTr("Log in to AniList")
-            font.pointSize: 18
-            wrapMode: Text.Wrap
-        }
         Text {
             width: parent.width
-            text: qsTr("Click the button below and we will open a webpage in your default browser that you can log into AniList with.\n"
+            text: qsTr("Click the button below and a webpage will be opened in your default browser to log into AniList. "
                        + "Once you login, you will be given a code that you should copy and paste into the text box below.")
             color: Kirigami.Theme.textColor
             font.pointSize: 14
@@ -51,7 +55,7 @@ Kirigami.Page {
                 Kirigami.Action {
                     text: qsTr("Enter Code")
                     iconName: "dialog-ok"
-                    onTriggered: window.core.anilist_login(code_field.text)
+                    onTriggered: page.login()
                 },
                 Kirigami.Action {
                     text: qsTr("Paste from Clipboard")
@@ -59,7 +63,7 @@ Kirigami.Page {
                     onTriggered: code_field.paste()
                 }
             ]
-            onAccepted: window.core.anilist_login(text)
+            onAccepted: page.login()
         }
     }
 }

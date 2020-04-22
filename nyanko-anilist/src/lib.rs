@@ -1,5 +1,6 @@
 mod login;
 mod search;
+mod user;
 use log::{info, error};
 use reqwest::Result as ReqwestResult;
 use serde::{Deserialize, Serialize};
@@ -8,7 +9,9 @@ use serde_json::Value as JsonValue;
 const URL: &str = "https://graphql.anilist.co";
 
 use login::auth_link;
-pub use search::{SearchEntry, SearchTitle, CoverImage};
+pub use login::Token;
+pub use search::{CoverImage, SearchEntry, SearchTitle};
+pub use user::{Avatar, Viewer};
 
 #[derive(Clone)]
 pub struct Client {
@@ -37,6 +40,12 @@ impl Client {
 				Err(error)
 			}
 		}
+	}
+
+	pub async fn user(&self, token: &str) -> ReqwestResult<Viewer> {
+		user::viewer(&self.client, token).await
+			.map(|user| { info!("Got User: {:#?}", user); user })
+			.map_err(|err| { error!("{:?}", err); err })
 	}
 }
 

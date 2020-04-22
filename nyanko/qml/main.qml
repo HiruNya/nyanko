@@ -6,6 +6,7 @@ import core 1.0
 
 Kirigami.ApplicationWindow {
     id: window
+    title: "Nyanko"
     property Kirigami.PagePool pagePool: pagePool_
     property Nyanko core: nyanko
     pageStack.initialPage: pagePool.loadPage("WelcomePage.qml")
@@ -28,7 +29,7 @@ Kirigami.ApplicationWindow {
             Kirigami.PagePoolAction {
                 text: "Accounts"
                 iconName: "user"
-                page: "AccountPage.qml"
+                page: "Accounts.qml"
                 pagePool: window.pagePool
             }
 
@@ -37,6 +38,7 @@ Kirigami.ApplicationWindow {
 
     Nyanko {
         id: nyanko
+        Component.onCompleted: nyanko.init()
     }
 
     Kirigami.PagePool {

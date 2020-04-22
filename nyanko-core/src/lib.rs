@@ -1,5 +1,7 @@
+mod accounts;
 mod nyanko;
 
+pub use accounts::AniListAccount;
 pub use nyanko::Nyanko;
 
 use once_cell::sync::OnceCell;
