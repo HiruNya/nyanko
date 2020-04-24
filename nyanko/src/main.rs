@@ -22,6 +22,7 @@ fn main() {
 
 	info!("Starting GUI");
 	engine.exec();
+	core::core().write().unwrap().shutdown();
 
 	info!("Shutting down");
 	finish.send(()).expect("Could not close the core runtime");

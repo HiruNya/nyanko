@@ -7,7 +7,7 @@ import org.kde.kirigami 2.11 as Kirigami
 Kirigami.ScrollablePage {
     id: accounts
     title: "Accounts"
-    property int selected: 0
+    property int selected: window.core.current_account
     property var account_list: window.core.accounts
     actions {
         main: Kirigami.PagePoolAction {
@@ -41,7 +41,7 @@ Kirigami.ScrollablePage {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: { accounts.selected = index }
+                onClicked: { window.core.current_account = index }
             }
 
             Loader {

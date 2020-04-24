@@ -4,12 +4,13 @@ use uuid::Uuid;
 
 use nyanko_anilist::{Token, Viewer};
 
-use std::{fs::{create_dir, read_dir}, path::Path, sync::Mutex};
+use std::{collections::HashMap, fs::{create_dir, read_dir}, path::Path, sync::Mutex};
+
+use crate::settings::Settings;
 
 #[derive(Default)]
 pub struct Accounts {
-	accounts: Vec<AniListAccount>,
-	current: usize,
+	accounts: HashMap<String, AniListAccount>,
 }
 impl Accounts {
 	pub fn load() -> Self {
@@ -32,22 +33,36 @@ impl Accounts {
 					Some(account)
 				})
 				.inspect(|account| info!("Found account: {} ~ {}", account.name, account.id))
-				.collect::<Vec<_>>()
-		}).map(|accounts| Accounts { accounts, current: 0 }).unwrap_or_default()
+				.map(|account| (account.id.clone(), account))
+				.collect::<HashMap<_, _>>()
+		}).map(|accounts| Accounts { accounts }).unwrap_or_default()
 	}
 	pub fn create(&mut self, token: Token) -> Option<&mut AniListAccount> {
-		AniListAccount::create(token)
-			.map(|account| self.accounts.push(account))
-			.and_then(move |()| self.accounts.last_mut())
+		let account = AniListAccount::create(token)?;
+		let id = account.id.clone();
+		self.accounts.insert(id.clone(), account);
+		self.accounts.get_mut(&id)
 	}
-	pub fn current(&self) -> Option<&AniListAccount> { self.accounts.get(self.current) }
-	pub fn current_mut(&mut self) -> Option<&mut AniListAccount> { self.accounts.get_mut(self.current) }
+	pub fn current(&self, settings: &Settings) -> Option<&AniListAccount> { self.accounts.get(settings.current.as_ref()?) }
+	pub fn current_mut(&mut self, settings: &Settings) -> Option<&mut AniListAccount> { self.accounts.get_mut(settings.current.as_ref()?) }
+	pub fn set_current(&self, settings: &mut Settings, current: String) -> bool {
+		let name = self.accounts.get(&current)
+			.map(|account| account.name.as_str());
+		if let Some(name) = name {
+			info!("Current account set to {} ~ {}", name, current);
+			settings.set_current(current);
+			true
+		} else {
+			error!("Could not set current account to {:?}", current);
+			false
+		}
+	}
 }
-impl AsRef<Vec<AniListAccount>> for Accounts {
-	fn as_ref(&self) -> &Vec<AniListAccount> { &self.accounts }
+impl AsRef<HashMap<String, AniListAccount>> for Accounts {
+	fn as_ref(&self) -> &HashMap<String, AniListAccount> { &self.accounts }
 }
-impl AsMut<Vec<AniListAccount>> for Accounts {
-	fn as_mut(&mut self) -> &mut Vec<AniListAccount> { &mut self.accounts }
+impl AsMut<HashMap<String, AniListAccount>> for Accounts {
+	fn as_mut(&mut self) -> &mut HashMap<String, AniListAccount> { &mut self.accounts }
 }
 
 pub struct AniListAccount {

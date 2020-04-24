@@ -1,5 +1,6 @@
 mod accounts;
 mod nyanko;
+mod settings;
 
 pub use accounts::AniListAccount;
 pub use nyanko::Nyanko;
