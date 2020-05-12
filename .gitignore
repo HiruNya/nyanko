@@ -3,3 +3,5 @@
 /.vscode
 /accounts
 settings.toml
+android_build.sh
+/.cargo

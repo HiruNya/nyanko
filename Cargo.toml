@@ -3,4 +3,5 @@ members = [
 	"nyanko",
 	"nyanko-core",
 	"nyanko-anilist",
+	"nyanko-c"
 ]

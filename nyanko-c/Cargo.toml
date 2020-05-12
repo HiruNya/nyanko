@@ -1,0 +1,18 @@
+[package]
+name = "nyanko-c"
+version = "0.1.0"
+authors = ["Hiruna Jayamanne <hiru@hiru.dev>"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+nyanko-core = { path = "../nyanko-core" }
+nyanko-anilist = { path = "../nyanko-anilist" }
+
+log = "0.4"
+tokio = "^0.2.20"
+
+[target.'cfg(target_os="android")'.dependencies]
+android_logger = "0.8"
