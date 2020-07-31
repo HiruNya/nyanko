@@ -720,7 +720,6 @@ dependencies = [
 [[package]]
 name = "nosqlite"
 version = "0.1.0"
-source = "git+https://github.com/HiruNya/nosqlite.git?rev=ec3387b243fdee18116656252dc8b42111d11793#ec3387b243fdee18116656252dc8b42111d11793"
 dependencies = [
  "rusqlite",
  "serde",

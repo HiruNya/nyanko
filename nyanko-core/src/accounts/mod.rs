@@ -19,7 +19,7 @@ impl Accounts {
 				.filter_map(|path| Some((Connection::open(&path).ok()?, path)))
 				.filter_map(|(connection, path)| {
 					let table: KeyTable<String> = connection.key_table("account").ok()?;
-					let users = table.as_ref().get("user".into());
+					let users = table.get("user".into());
 					let user = users.data::<Viewer, _>(&connection).unwrap().unwrap();
 					let avatar = user.avatar.large.or(user.avatar.medium);
 					let name = user.name;
@@ -27,7 +27,7 @@ impl Accounts {
 						avatar,
 						name,
 						id: path.file_name()?.to_str()?.trim_end_matches(".db").into(),
-						token: table.as_ref().get("token".into()).data(&connection).ok()??,
+						token: table.get("token".into()).data(&connection).ok()??,
 						table: Mutex::new(connection),
 					};
 					Some(account)
@@ -111,7 +111,7 @@ impl AniListAccount {
 	}
 	pub fn update(&mut self, user: Viewer) -> Option<()> {
 		let connection = self.table.get_mut().ok()?;
-		connection.key_table::<String, _>("account").ok()?.as_ref()
+		connection.key_table::<String, _>("account").ok()?
 			.iter().patch(&user, &connection).ok()?;
 		self.name = user.name;
 		self.avatar = user.avatar.large.or(user.avatar.medium);

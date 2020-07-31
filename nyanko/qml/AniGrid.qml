@@ -10,7 +10,7 @@ Kirigami.CardsGridView {
         id: card
         banner.title: title
         banner.source: image
-        banner.cache: false
+//        banner.cache: false
         banner.sourceSize.height: 260
         banner.sourceSize.width: 400
         /// Original Size
