@@ -1,7 +1,8 @@
-/target
-/.idea
-/.vscode
-/accounts
+target/
+.idea/
+.vscode/
+accounts/
 settings.toml
 android_build.sh
-/.cargo
+.cargo/
+/**/dist/*

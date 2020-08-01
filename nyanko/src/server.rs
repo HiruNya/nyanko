@@ -39,7 +39,7 @@ pub fn serve(shutdown: impl Future<Output=()> + Send + 'static) -> SocketAddr {
 }
 
 fn server(runtime: Runtime) -> impl Filter<Extract=impl Reply> + Clone {
-	fs::dir("./nyanko/static")
+	fs::dir("./nyanko/dist")
 		.or(
 			path("login").and(
 				path("link").and_then(login_link(runtime.clone()))      // /login/link
