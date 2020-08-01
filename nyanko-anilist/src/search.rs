@@ -41,7 +41,7 @@ pub async fn search(client: &reqwest::Client, query: &str) -> ReqwestResult<Vec<
 }
 
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SearchEntry {
 	pub id: i64,
@@ -50,14 +50,14 @@ pub struct SearchEntry {
 	pub cover_image: CoverImage,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SearchTitle {
 	pub english: Option<String>,
 	pub user_preferred: Option<String>,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize)]
 pub struct CoverImage {
 	pub large: String,
 }

@@ -1,29 +1,31 @@
-#[macro_use] extern crate cstr;
+use futures::FutureExt;
 #[macro_use] extern crate log;
-#[macro_use] extern crate qmetaobject;
-mod core;
-mod gui;
-mod model;
-mod resource;
-
-use qmetaobject::{QmlEngine, qml_register_type};
+use web_view::{Content, WebViewBuilder};
 
 use std::env;
+
+mod server;
 
 fn main() {
 	if env::var("RUST_LOG").is_err() { env::set_var("RUST_LOG", "INFO") }
 	pretty_env_logger::init();
-	info!("Starting");
-	let mut engine = QmlEngine::new();
-	let finish = nyanko_core::run_runtime();
-	resource::declare_resources();
-	qml_register_type::<gui::Gui>(cstr!("core"), 1, 0, cstr!("Nyanko"));
-	engine.load_file("qrc:/qml/main.qml".into());
+	let (shutdown, shutdown_recv) = tokio::sync::oneshot::channel();
 
-	info!("Starting GUI");
-	engine.exec();
-	core::core().write().unwrap().shutdown();
+	let socket = server::serve(shutdown_recv.map(|_| ()));
+	info!("Hosted on ethereal port: {}", socket);
+
+	WebViewBuilder::new()
+		.title("Nyanko")
+		.content(Content::Url(format!("http://{}/index.html", socket)))
+		.invoke_handler(|_, _| Ok(()))
+		.user_data(())
+		.resizable(true)
+		.debug(cfg!(debug_assertions))
+		.build()
+		.expect("Could not build web view GUI")
+		.run()
+		.expect("Error running the web view GUI");
 
 	info!("Shutting down");
-	finish.send(()).expect("Could not close the core runtime");
+	shutdown.send(()).expect("Could not close the core runtime");
 }

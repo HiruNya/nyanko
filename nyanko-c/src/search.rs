@@ -18,9 +18,7 @@ pub unsafe extern "C" fn search(nyanko: *mut Init, query: *mut c_char) -> *mut S
 		.into_iter()
 		.map(SearchEntry::from)
 		.collect::<Vec<_>>();
-	let ptr = Box::into_raw(Box::new(SearchEntries::from(vec)));
-	ptr
-
+	Box::into_raw(Box::new(SearchEntries::from(vec)))
 }
 
 #[no_mangle]

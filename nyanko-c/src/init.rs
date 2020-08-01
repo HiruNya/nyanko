@@ -1,7 +1,7 @@
 use log::error;
 use tokio::sync::oneshot::Sender;
 
-use nyanko_core::{HANDLE, Nyanko, run_runtime};
+use nyanko_core::{Nyanko, run_runtime};
 
 #[no_mangle]
 pub extern "C" fn init() -> *mut Init {
@@ -13,8 +13,8 @@ pub extern "C" fn init() -> *mut Init {
 				.with_min_level(log::Level::Info));
 			info!("Logger initialised");
 		}
-	let shutdown = run_runtime();
-	let nyanko = Nyanko::with_handle(HANDLE.get().unwrap().clone());
+	let (shutdown, handle) = run_runtime();
+	let nyanko = Nyanko::with_handle(handle);
 	Box::into_raw(Box::new(Init {
 		nyanko,
 		shutdown,

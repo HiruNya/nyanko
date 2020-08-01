@@ -1,10 +1,11 @@
 use log::{error, info};
 use nosqlite::{Connection, KeyTable};
+use serde::Serialize;
 use uuid::Uuid;
 
-use nyanko_anilist::{Token, Viewer};
-
 use std::{collections::HashMap, fs::{create_dir, read_dir}, path::Path, sync::Mutex};
+
+use nyanko_anilist::{Token, Viewer};
 
 use crate::settings::Settings;
 
@@ -65,10 +66,12 @@ impl AsMut<HashMap<String, AniListAccount>> for Accounts {
 	fn as_mut(&mut self) -> &mut HashMap<String, AniListAccount> { &mut self.accounts }
 }
 
+#[derive(Serialize)]
 pub struct AniListAccount {
 	pub avatar: Option<String>,
 	pub name: String,
 	pub id: String,
+	#[serde(skip)]
 	pub table: Mutex<Connection>,
 	pub token: Token,
 }
